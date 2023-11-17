@@ -100,7 +100,7 @@ def main():
     start = time.time()
     while True:
         print("Time elapsed since last scan: ",time.time() - start, " seconds")
-        if ((time.time() - start) >= 5):
+        if ((time.time() - start) >= 100):
             run(receiver, sona_username, sona_password)
             start = time.time()
         input_list = [sys.stdin]
