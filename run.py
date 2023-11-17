@@ -9,8 +9,13 @@ from email.mime.multipart import MIMEMultipart
 
 import select
 
+global my_studies
+my_studies = None
+
 def run(receiver, sona_username, sona_password):
+    global my_studies
     def find_my_studies():
+        global my_studies
         # finding studies done already
         studies = []
         driver.find_element(By.LINK_TEXT, "My Schedule/Credits").click()
@@ -74,8 +79,9 @@ def run(receiver, sona_username, sona_password):
     driver.implicitly_wait(0.5)
 
     # finding studies done
-    my_studies = find_my_studies()
-    print("Studies Completed Already")
+    if (my_studies == None):
+        my_studies = find_my_studies()
+    print("Studies Notified/Completed:-")
     for j in my_studies:
         print(j)
     print()
@@ -88,6 +94,8 @@ def run(receiver, sona_username, sona_password):
             new_studies.append([row.text, row.get_attribute("href")])        
     if (len(new_studies) > 0):
         send_email(new_studies)
+        for a, b in new_studies:
+            my_studies.append(a)
         new_studies=[]
     else:
         print("No new studies yet")
@@ -100,7 +108,7 @@ def main():
     start = time.time()
     while True:
         print("Time elapsed since last scan: ",time.time() - start, " seconds")
-        if ((time.time() - start) >= 100):
+        if ((time.time() - start) >= 100 or (time.time() - start) < 1):
             run(receiver, sona_username, sona_password)
             start = time.time()
         input_list = [sys.stdin]
