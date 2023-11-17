@@ -79,7 +79,7 @@ def run(receiver, sona_username, sona_password):
     for j in my_studies:
         print(j)
     print()
-    new_studies = [["test1", "link1"]]
+    new_studies = []
     # finding studies
     table = driver.find_element(By.TAG_NAME, value="table")
     titles = table.find_elements(By.CSS_SELECTOR, value="strong a")
