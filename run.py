@@ -49,57 +49,59 @@ def run(receiver, sona_username, sona_password):
         with smtp as server:
             server.login(sender, password)
             server.sendmail(sender, receiver, msg.as_string())
+    try:
+        # starting chromedriver
+        driver = webdriver.Chrome()
+        # getting website
+        driver.get("https://purdue-psych.sona-systems.com/Default.aspx?ReturnUrl=%2fall_exp_participant.aspx")
 
-    # starting chromedriver
-    driver = webdriver.Chrome()
-    # getting website
-    driver.get("https://purdue-psych.sona-systems.com/Default.aspx?ReturnUrl=%2fall_exp_participant.aspx")
+        # login
+        user_button = driver.find_element(By.NAME, value="ctl00$ContentPlaceHolder1$userid")
+        user_button.send_keys(sona_username)
 
-    # login
-    user_button = driver.find_element(By.NAME, value="ctl00$ContentPlaceHolder1$userid")
-    user_button.send_keys(sona_username)
+        driver.implicitly_wait(0.5)
 
-    driver.implicitly_wait(0.5)
+        password = driver.find_element(By.NAME, value="ctl00$ContentPlaceHolder1$pw")
+        password.send_keys(sona_password)
 
-    password = driver.find_element(By.NAME, value="ctl00$ContentPlaceHolder1$pw")
-    password.send_keys(sona_password)
+        driver.implicitly_wait(0.5)
 
-    driver.implicitly_wait(0.5)
+        login = driver.find_element(By.NAME, value="ctl00$ContentPlaceHolder1$default_auth_button")
+        login.click()
 
-    login = driver.find_element(By.NAME, value="ctl00$ContentPlaceHolder1$default_auth_button")
-    login.click()
+        driver.implicitly_wait(0.5)
 
-    driver.implicitly_wait(0.5)
+        # viewing studies
 
-    # viewing studies
+        view_studies = driver.find_element(By.ID, value="lnkStudySignupLink")
+        view_studies.click()
 
-    view_studies = driver.find_element(By.ID, value="lnkStudySignupLink")
-    view_studies.click()
+        driver.implicitly_wait(0.5)
 
-    driver.implicitly_wait(0.5)
-
-    # finding studies done
-    if (my_studies == None):
-        my_studies = find_my_studies()
-    print("Studies Notified/Completed:-")
-    for j in my_studies:
-        print(j)
-    print()
-    new_studies = []
-    # finding studies
-    table = driver.find_element(By.TAG_NAME, value="table")
-    titles = table.find_elements(By.CSS_SELECTOR, value="strong a")
-    for row in titles:
-        if (row.text not in my_studies):
-            new_studies.append([row.text, row.get_attribute("href")])        
-    if (len(new_studies) > 0):
-        send_email(new_studies)
-        for a, b in new_studies:
-            my_studies.append(a)
-        new_studies=[]
-    else:
-        print("No new studies yet")
-    driver.quit()
+        # finding studies done
+        if (my_studies == None):
+            my_studies = find_my_studies()
+        print("Studies Notified/Completed:-")
+        for j in my_studies:
+            print(j)
+        print()
+        new_studies = []
+        # finding studies
+        table = driver.find_element(By.TAG_NAME, value="table")
+        titles = table.find_elements(By.CSS_SELECTOR, value="strong a")
+        for row in titles:
+            if (row.text not in my_studies):
+                new_studies.append([row.text, row.get_attribute("href")])        
+        if (len(new_studies) > 0):
+            send_email(new_studies)
+            for a, b in new_studies:
+                my_studies.append(a)
+            new_studies=[]
+        else:
+            print("No new studies yet")
+        driver.quit()
+    except:
+        return
 
 def main():
     receiver = input("Please enter the email where you want to receive notifications: ")
@@ -109,12 +111,14 @@ def main():
     while True:
         print("Time elapsed since last scan: ",time.time() - start, " seconds")
         if ((time.time() - start) >= 100 or (time.time() - start) < 1):
-            run(receiver, sona_username, sona_password)
+            try:
+                run(receiver, sona_username, sona_password)
+            except:
+                time.sleep(100)
             start = time.time()
         input_list = [sys.stdin]
         ready_to_read, _, _ = select.select(input_list, [], [], 5)
         if sys.stdin in ready_to_read:
             input()
             break
-    
 main()
