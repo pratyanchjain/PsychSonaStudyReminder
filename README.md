@@ -11,4 +11,8 @@ Upon running the program, you will first be asked for your email account where y
 
 Then, all you need to do is to let the program keep running in the background. You will get notified via Outlook whenever a new study opens up in which you haven't participated already!
 
+At any point, if you want to exit the program or terminate the search process, any terminal input will do just that. Remember, you need to make sure that the program has a stable internet connection, and that it is kept running.
+
+**Report any bugs, or suggestions to jain617@purdue.edu!**
+
 
