@@ -9,6 +9,6 @@ To be able to run this program, you will need to run the run.py file on your loc
 ## Authorization
 Upon running the program, you will first be asked for your email account where you will receive notifications. You will also be asked for your SONA username and password for the script to run. 
 
-Then, all you need to do is to let the program keep running in the background. You will get notified via Outlook whenever a new study opens up in which you haven't participated already.!
+Then, all you need to do is to let the program keep running in the background. You will get notified via Outlook whenever a new study opens up in which you haven't participated already!
 
 
