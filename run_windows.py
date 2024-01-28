@@ -120,4 +120,4 @@ def main():
           key = msvcrt.getch()
           if key == b'\r':  # Enter key pressed
               break
-        main()
+main()
